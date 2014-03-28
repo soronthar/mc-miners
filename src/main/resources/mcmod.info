@@ -1,0 +1,16 @@
+[
+{
+  "modid": "sorontharminer",
+  "name": "Automatic Miner",
+  "description": "Automatically mine",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["Soronthar"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
