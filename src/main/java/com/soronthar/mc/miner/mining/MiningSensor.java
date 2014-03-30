@@ -9,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
-public class OreDetector {
+public class MiningSensor {
     private static final Block[] fillBlock = {
             Blocks.dirt,
             Blocks.grass,
@@ -36,7 +36,7 @@ public class OreDetector {
     Vect3i[][][] coords;
     boolean[][][] visited;
 
-    public OreDetector() {
+    public MiningSensor() {
         moveTo(new Vect3i(0, 0, 0), Facing.NORTH);
     }
 

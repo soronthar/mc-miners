@@ -3,6 +3,7 @@ package com.soronthar.mc.miner.drill;
 import com.soronthar.mc.core.Facing;
 import com.soronthar.mc.core.Vect3i;
 import com.soronthar.mc.miner.MinerMod;
+import com.soronthar.mc.miner.mining.MiningSensor;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -19,12 +20,14 @@ public class Drill {
     World world;
 
     private boolean powered=true;
+    private MiningSensor sensor = new MiningSensor();
 
 
     public void readFromNBT(NBTTagCompound tagCompound) {
         this.facing = tagCompound.getInteger("facing");
         this.powered = tagCompound.getBoolean("drillpowered");
         this.drillPos = Vect3i.readFromNBT(tagCompound, "drillingPos");
+        this.sensor.readFromNBT(tagCompound, "oreDetector");
     }
 
     public void writeToNBT(NBTTagCompound tagCompound) {
@@ -32,6 +35,7 @@ public class Drill {
         tagCompound.setBoolean("drillpowered", this.powered);
 
         this.drillPos.writeToNBT(tagCompound, "drillingPos");
+        this.sensor.writeToNBT(tagCompound, "oreDetector");
 
     }
 
@@ -45,15 +49,16 @@ public class Drill {
     }
 
     public void turnLeft() {
-        this.facing= Facing.turnLeft(this.facing);
+        turn(Facing.turnLeft(this.facing));
     }
 
     public void turnRight() {
-        this.facing=Facing.turnRight(this.facing);
+        turn(Facing.turnRight(this.facing));
     }
 
     public void turn(int facing) {
         this.facing=facing;
+        sensor.moveTo(this.drillPos, this.facing);
     }
 
 
@@ -84,6 +89,8 @@ public class Drill {
     public void moveForward() {
         removeDrillBlock(this.world);
         this.drillPos.move(this.facing);
+        sensor.moveTo(this.drillPos, this.facing);
+
         //todo> solve the rendering of drillblock
         Block block = GameData.blockRegistry.getObject(MinerMod.MODID+":"+DrillBlock.ID);
 
@@ -115,4 +122,20 @@ public class Drill {
         return world;
     }
 
+    public void setDrillPos(Vect3i drillPos) {
+        this.drillPos = drillPos;
+        sensor.moveTo(this.drillPos, this.facing);
+    }
+
+    public boolean isPathBlocked() {
+        return sensor.isPathBlocked(this.world);
+    }
+
+    public boolean isBlockTypeOnPath(Block... blocks) {
+        return sensor.isBlockTypeOnPath(this.world, blocks);
+    }
+
+    public Vect3i findPosToDrill() {
+        return sensor.findPosToDrill(this.world);
+    }
 }

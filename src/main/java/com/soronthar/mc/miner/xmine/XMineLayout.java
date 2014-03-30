@@ -42,20 +42,18 @@ public class XMineLayout extends BaseMineStrategy {
         List<ItemStack> drops;
 
 
-        Vect3i posToDrill = oreDetector.findPosToDrill(world);
+        Vect3i posToDrill = this.drill.findPosToDrill();
 
         if (posToDrill != null) {
             drops = drill.drillAt(posToDrill);
         } else {
-            if (!oreDetector.isPathBlocked(world)) {
-                steer();
-                oreDetector.moveTo(this.drill.drillPos, this.drill.facing);      //TODO: optimize
+            steer();
+            if (!drill.isPathBlocked()) {
 
                 drops = drill.drillForward();
 
-                if (!oreDetector.isBlockTypeOnPath(world, Blocks.gravel, Blocks.sand, Blocks.bedrock)) {
+                if (!drill.isBlockTypeOnPath(Blocks.gravel, Blocks.sand, Blocks.bedrock)) {
                     drill.moveForward();
-                    oreDetector.moveTo(this.drill.drillPos, this.drill.facing);
                     this.step++;
                 }
             } else {

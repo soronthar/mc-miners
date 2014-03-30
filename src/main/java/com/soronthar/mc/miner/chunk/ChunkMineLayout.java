@@ -61,13 +61,13 @@ public class ChunkMineLayout extends BaseMineStrategy {
         List<ItemStack> drops;
         this.drill.setWorld(world);
 
-        if (!this.oreDetector.isPathBlocked(world)) {
+        if (!this.drill.isPathBlocked()) {
             drops = this.drill.drillForward();
 
-            if (this.oreDetector.isBlockTypeOnPath(world, DrillBlock.instance)) {
+            if (this.drill.isBlockTypeOnPath(DrillBlock.instance)) {
                 this.drill.turnOff(world);
                 messageTurnOffDrill("DrillBlock found. Powering off");
-            } else if (!this.oreDetector.isBlockTypeOnPath(world, Blocks.gravel, Blocks.sand, Blocks.bedrock)) {
+            } else if (!this.drill.isBlockTypeOnPath(Blocks.gravel, Blocks.sand, Blocks.bedrock)) {
                 this.drill.moveForward();
                 this.step++;
 
@@ -94,7 +94,6 @@ public class ChunkMineLayout extends BaseMineStrategy {
                         this.phase=TURNING;
                     }
                 }
-                oreDetector.moveTo(this.drill.drillPos, this.drill.facing);
             }
         } else {
             if (drill.isPowered()) {
