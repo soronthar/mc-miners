@@ -1,7 +1,6 @@
 package com.soronthar.mc.miner.chunk;
 
 import com.soronthar.mc.core.Facing;
-import com.soronthar.mc.miner.drill.DrillBlock;
 import com.soronthar.mc.miner.mining.BaseMineStrategy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -15,7 +14,7 @@ import java.util.List;
 
 //TODO: find the nearest chunk
 public class ChunkMineLayout extends BaseMineStrategy {
-    private static final int STEP=16;
+    private static final int STEP=3;
     private static final int LEFT=0;
     private static final int RIGHT=1;
     public static final int TURNING = 1;
@@ -64,10 +63,7 @@ public class ChunkMineLayout extends BaseMineStrategy {
         if (!this.drill.isPathBlocked()) {
             drops = this.drill.drillForward();
 
-            if (this.drill.isBlockTypeOnPath(DrillBlock.instance)) {
-                this.drill.turnOff(world);
-                messageTurnOffDrill("DrillBlock found. Powering off");
-            } else if (!this.drill.isBlockTypeOnPath(Blocks.gravel, Blocks.sand, Blocks.bedrock)) {
+            if (!this.drill.isBlockTypeOnPath(Blocks.gravel, Blocks.sand, Blocks.bedrock)) {  //TODO: or facing down
                 this.drill.moveForward();
                 this.step++;
 
